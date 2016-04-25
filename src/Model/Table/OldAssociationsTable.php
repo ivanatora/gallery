@@ -1,7 +1,7 @@
 <?php
 namespace App\Model\Table;
 
-use App\Model\Entity\File;
+use App\Model\Entity\OldAssociation;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -12,8 +12,12 @@ use Cake\Validation\Validator;
  *
  * @property \Cake\ORM\Association\BelongsTo $Fs
  */
-class FilesTable extends Table
+class OldAssociationsTable extends Table
 {
+    public static function defaultConnectionName()
+    {
+        return 'old';
+    }
 
     /**
      * Initialize method
@@ -25,7 +29,6 @@ class FilesTable extends Table
     {
         parent::initialize($config);
 
-        $this->table('files');
+        $this->table('associations');
     }
-
 }

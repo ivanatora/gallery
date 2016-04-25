@@ -4,16 +4,15 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * File Entity.
+ * FilesTag Entity.
  *
- * @property int $f_id
- * @property \App\Model\Entity\F $f
- * @property string $f_filename
- * @property string $f_need_tagging
- * @property int $f_views
- * @property \Cake\I18n\Time $f_last_viewed
+ * @property int $id
+ * @property int $file_id
+ * @property \App\Model\Entity\File $file
+ * @property int $tag_id
+ * @property \App\Model\Entity\Tag $tag
  */
-class File extends Entity
+class FilesTag extends Entity
 {
 
     /**

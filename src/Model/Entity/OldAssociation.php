@@ -13,7 +13,7 @@ use Cake\ORM\Entity;
  * @property int $f_views
  * @property \Cake\I18n\Time $f_last_viewed
  */
-class File extends Entity
+class OldAssociation extends Entity
 {
 
     /**
@@ -27,6 +27,5 @@ class File extends Entity
      */
     protected $_accessible = [
         '*' => true,
-        'id' => true,
     ];
 }
