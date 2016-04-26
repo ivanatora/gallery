@@ -74,7 +74,7 @@ class TestController extends AppController {
 
     public function migrateAssociations(){
         set_time_limit(0);
-        
+
         $this->FilesTags->deleteAll([1 => 1]);
 
         $tmp = $this->OldAssociations->find('all');
@@ -82,12 +82,11 @@ class TestController extends AppController {
 
         for ($i = 0; $i < $tmp->count(); $i += 100){
             $tmp = $this->OldAssociations->find('all', array(
-                'start' => $i,
+                'offset' => $i,
                 'limit' => 100
             ));
             $aBatchUpdate = array();
-            foreach ($tmp as $item){
-//                exit();
+            foreach ($tmp as $idx => $item){
                 try {
                     $this->Files->get($item->f_id);
                 }

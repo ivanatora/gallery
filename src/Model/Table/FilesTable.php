@@ -26,6 +26,8 @@ class FilesTable extends Table
         parent::initialize($config);
 
         $this->table('files');
+
+        $this->hasMany('FilesTags');
     }
 
 }

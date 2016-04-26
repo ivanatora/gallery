@@ -37,8 +37,7 @@ class AppController extends Controller
      *
      * @return void
      */
-    public function initialize()
-    {
+    public function initialize(){
         parent::initialize();
 
         $this->loadComponent('RequestHandler');
@@ -51,12 +50,19 @@ class AppController extends Controller
      * @param \Cake\Event\Event $event The beforeRender event.
      * @return void
      */
-    public function beforeRender(Event $event)
-    {
+    public function beforeRender(Event $event){
         if (!array_key_exists('_serialize', $this->viewVars) &&
             in_array($this->response->type(), ['application/json', 'application/xml'])
         ) {
             $this->set('_serialize', true);
         }
+    }
+    
+    public function getQueryVal($key, $default = ''){
+        if (isset($this->request->data[$key])){
+            return $this->request->data[$key];
+        }
+        
+        return $default;
     }
 }
