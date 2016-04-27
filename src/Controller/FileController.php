@@ -37,6 +37,7 @@ class FileController extends AppController {
 
     public function get($iFileId){
         $tmp = $this->Files->get($iFileId);
+        //@TODO: increment views and last viewed
         
         if ($tmp){
             $tmp = $tmp->toArray();

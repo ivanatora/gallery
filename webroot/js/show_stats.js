@@ -3,9 +3,9 @@ function submitCheckboxes(){
     var aBoxes = $("input:checkbox:checked");
     var aTagIds = [];
     aBoxes.each(function(){
-        aTagIds.push($(this).attr('c_id'));
+        aTagIds.push($(this).attr('data-tag-id'));
     })
 
-    window.location = "/generate_sequence.php?c_ids=" + aTagIds.join(",");
+    window.location = "/tag/generate_sequence/" + aTagIds.join(",");
 }
 

@@ -87,12 +87,12 @@ class TestController extends AppController {
             ));
             $aBatchUpdate = array();
             foreach ($tmp as $idx => $item){
-                try {
-                    $this->Files->get($item->f_id);
-                }
-                catch (Exception $e){
-                    continue;
-                }
+                $bExists = $this->Files->find('all', array(
+                    'conditions' => array(
+                        'Files.id' => $item->f_id
+                    )
+                ));
+                if ($bExists->count() == 0) continue;
 
                 $bExists = $this->Tags->find('all', array(
                     'conditions' => array(

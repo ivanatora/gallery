@@ -39,6 +39,63 @@ class TagController extends AppController {
         $this->viewBuilder()->layout('ajax');
     }
     
+    public function stats(){
+        $tmp = $this->FilesTags->find();
+        $tmp->select([
+            'Tags.name',
+            'tag_id',
+            'cnt' => $tmp->func()->count('tag_id')
+        ])->group('tag_id')->order('cnt DESC')->contain(['Tags']);
+        lm("DA vidim ko doide" . print_r($tmp, true));
+        $aTopTags = array();
+        foreach ($tmp as $item){
+            lm("ITEM: " . print_r($item, true));
+            $aTopTags[] = [
+                'tag_id' => $item->tag_id,
+                'name' => $item->tag->name,
+                'cnt' => $item->cnt
+            ];
+        }
+        $this->set('top_tags', $aTopTags);
+
+        lm('final' . print_r($aTopTags, true));
+
+        $this->viewBuilder()->layout('ajax');
+    }
+
+    public function generateSequence($mTagIds = 'rand'){
+        $aTagIds = [];
+        if ($mTagIds == 'rand'){
+            $tmp = $this->Tags->find('all', [
+                'order' => 'RAND()'
+            ]);
+            $aTagIds[] = $tmp->first()->id;
+        }
+        else {
+            $aTagIds = explode(',', $mTagIds);
+        }
+
+        //@TODO: multiple categories
+
+        $tmp = $this->FilesTags->find('all', [
+            'conditions' => [
+                'FilesTags.tag_id IN' => $aTagIds
+            ],
+            'order' => 'RAND()',
+            'contain' => ['Files']
+        ]);
+        lm("PRE EEC " . print_r($tmp, true));
+
+        $aFileIds = [];
+        foreach ($tmp as $item){
+            lm("FILETAG item " . print_r($item, true));
+            $aFileIds[] = $item->file->id;
+        }
+        $this->set('data', $aFileIds);
+
+        $this->viewBuilder()->layout('ajax');
+    }
+    
     public function getCloud(){
         $tmp = $this->Tags->find('all', array(
             'order' => 'Tags.id ASC'

@@ -20,7 +20,7 @@ function writeTitle(sMsg){
 }
 
 function loadImage(iFileId){
-    var sUrl = 'ajax.php?action=getImageById&f_id=' + iFileId;
+    var sUrl = '/file/get/' + iFileId;
     $("#image_here").attr('src', sUrl);
 
     document.title = iFileId;
@@ -82,14 +82,18 @@ $(document).ready(function(){
         var iHeight = $("#image_here").height();
         var fRatio = parseFloat(iWidth / iHeight);
 
-        var iMaxWidth = $(window).width() - 10;
-        var iMaxHeight = $(window).height() - 60;
+        var iMaxWidth = window.innerWidth - 10;
+        var iMaxHeight = window.innerHeight - 100;
 
-        if (iWidth > iMaxWidth){
+        var iDeltaWidth = iWidth - iMaxWidth;
+        var iDeltaHeight = iHeight - iMaxHeight;
+
+        if (iDeltaWidth > iDeltaHeight){
             $(this).attr('width', iMaxWidth);
+            var fCorrection = iWidth / iMaxWidth;
+            $(this).attr('height', iHeight / fCorrection);
         }
-        
-        if (iHeight > iMaxHeight){
+        else {
             $(this).attr('height', iMaxHeight);
             var fCorrection = iHeight / iMaxHeight;
             $(this).attr('width', iWidth / fCorrection)
