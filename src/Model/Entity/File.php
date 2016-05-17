@@ -27,6 +27,6 @@ class File extends Entity
      */
     protected $_accessible = [
         '*' => true,
-        'id' => true,
+        'id' => true
     ];
 }

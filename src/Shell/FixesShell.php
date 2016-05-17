@@ -28,4 +28,55 @@ class FixesShell extends Shell {
             }
         }
     }
+
+    public function fixCreated(){
+        $tmp = $this->Files->find('all');
+        foreach ($tmp as $item){
+            $sFilename = $item->filename;
+            $tsModified = filemtime($sFilename);
+            $item->created = date('Y-m-d H:i:s', $tsModified);
+            $this->Files->save($item);
+        }
+    }
+
+    public function crawl($sRootDir = '/home/ivanatora/ip'){
+        $aExtensions = array('jpg', 'jpeg', 'png', 'gif');
+//        $sRootDir = '/home/ivanatora/ip/'; //@TODO: get directories from db
+        $tmp = $this->Files->find('all', [
+            'order' => ['created DESC', 'id DESC']
+        ]);
+        print_r($tmp->first());
+        $sFilename = $tmp->first()->filename;
+        $tsModified = filemtime($sFilename);
+        $tsNow = time();
+        $iDiffDays = ceil(($tsNow - $tsModified) / (24 * 3600));
+        print "Diff days: $iDiffDays\n";
+        $sCmd = "find $sRootDir -mtime -$iDiffDays";
+        $res = `$sCmd`;
+        $aLines = explode("\n", $res);
+        print_r($aLines);
+
+        foreach ($aLines as $sFullpath){
+            $sExtension = pathinfo($sFullpath, PATHINFO_EXTENSION);
+            if (in_array($sExtension, $aExtensions)){
+                $bFileExists = $this->Files->find('all', array(
+                    'conditions' => array(
+                        'Files.filename' => $sFullpath,
+                    )
+                ))->count();
+
+                if (! $bFileExists){
+                    print "adding $sFullpath\n";
+                    $aUpdateData = array(
+                        'filename' => $sFullpath,
+                        'last_viewed' => date('Y-m-d H:i:s')
+                    );
+                    print_r($aUpdateData);
+                    $e = $this->Files->newEntity($aUpdateData);
+                    print_r($e);
+                    $this->Files->save($e);
+                }
+            }
+        }
+    }
 }
