@@ -2,6 +2,7 @@
 namespace App\Shell;
 
 use Cake\Console\Shell;
+use Cake\Database\Type;
 
 class FixesShell extends Shell {
 
@@ -69,12 +70,16 @@ class FixesShell extends Shell {
                     print "adding $sFullpath\n";
                     $aUpdateData = array(
                         'filename' => $sFullpath,
-                        'last_viewed' => date('Y-m-d H:i:s')
+                        'last_viewed' => date('Y-m-d H:i:s'),
+						'needs_tagging' => 1,
+						'cnt_views' => 0
                     );
                     print_r($aUpdateData);
+					$dateTimeType = Type::build('datetime')->useLocaleParser(false);	
                     $e = $this->Files->newEntity($aUpdateData);
                     print_r($e);
                     $this->Files->save($e);
+					$dateTimeType->useLocaleParser(true);
                 }
             }
         }

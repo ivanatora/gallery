@@ -6,6 +6,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\Behavior\TimestampBehavior;
 
 /**
  * Files Model
@@ -26,8 +27,8 @@ class FilesTable extends Table
         parent::initialize($config);
 
         $this->table('files');
-
         $this->hasMany('FilesTags');
+	$this->addBehavior('Timestamp');
     }
 
 }
