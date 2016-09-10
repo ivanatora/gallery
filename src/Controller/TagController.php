@@ -46,10 +46,10 @@ class TagController extends AppController {
             'tag_id',
             'cnt' => $tmp->func()->count('tag_id')
         ])->group('tag_id')->order('cnt DESC')->contain(['Tags']);
-        lm("DA vidim ko doide" . print_r($tmp, true));
+//        lm("DA vidim ko doide" . print_r($tmp, true));
         $aTopTags = array();
         foreach ($tmp as $item){
-            lm("ITEM: " . print_r($item, true));
+//            lm("ITEM: " . print_r($item, true));
             $aTopTags[] = [
                 'tag_id' => $item->tag_id,
                 'name' => $item->tag->name,
@@ -58,7 +58,7 @@ class TagController extends AppController {
         }
         $this->set('top_tags', $aTopTags);
 
-        lm('final' . print_r($aTopTags, true));
+//        lm('final' . print_r($aTopTags, true));
 
         $this->viewBuilder()->layout('ajax');
     }
@@ -84,7 +84,7 @@ class TagController extends AppController {
             'order' => 'RAND()',
             'contain' => ['Files']
         ]);
-        lm("PRE EEC " . print_r($tmp, true));
+//        lm("PRE EEC " . print_r($tmp, true));
 
         $aFileIds = [];
         foreach ($tmp as $item){
@@ -160,6 +160,27 @@ class TagController extends AppController {
 
         if ($tmp){
             $tmp->needs_tagging = 0;
+            $this->Files->save($tmp);
+        }
+
+
+        $data = array(
+            'success' => true,
+        );
+        echo json_encode($data); exit();
+    }
+    
+    public function setNotTagged(){
+        $iFileId = $this->getQueryVal('file_id');
+
+        $tmp = $this->Files->find('all', array(
+            'conditions' => array(
+                'Files.id' => $iFileId
+            )
+        ))->first();
+
+        if ($tmp){
+            $tmp->needs_tagging = 1;
             $this->Files->save($tmp);
         }
 

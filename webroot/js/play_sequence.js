@@ -53,9 +53,8 @@ $(document).ready(function(){
         if (iCode == 27){ // ESC
             $.ajax({
                 type: 'POST',
-                url: 'ajax.php',
+                url: '/tag/setNotTagged',
                 data: {
-                    action: 'setFileNeedsTagging',
                     file_id: iCurrentFileId
                 }
             })
